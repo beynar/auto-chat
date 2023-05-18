@@ -2,14 +2,11 @@ import { dev } from "$app/environment";
 
 export const load = async ({ platform }) => {
   if (dev || !platform?.env?.DB) {
+    const { results, meta, error } = await fetch("https://auto-chat.pages.dev/api").then((res) => res.json());
     return {
-      messages: [
-        {
-          date: "2021-05-01",
-          content: "Hello World",
-          role: "Emotion"
-        }
-      ]
+      messages: results as App.Types["Message"][],
+      meta,
+      error
     };
   } else {
     const getMessageSql = /*SQL */ `

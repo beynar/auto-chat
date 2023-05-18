@@ -13,7 +13,7 @@
       content,
       date: new Date().toISOString()
     };
-    const res = await fetch("/api", {
+    const res = await fetch("https://auto-chat.pages.dev/api", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
