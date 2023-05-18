@@ -9,7 +9,7 @@
     const message = {
       role: "Emotion",
       content: value,
-      date: new Date().toDateString()
+      date: new Date().toISOString()
     };
     const res = await fetch("/api", {
       method: "POST",
