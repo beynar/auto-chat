@@ -4,7 +4,9 @@ declare global {
   namespace App {
     // interface Error {}
     // interface Locals {}
-    // interface PageData {}
+    interface PageData {
+      messages: Types["Message"][];
+    }
     interface Types {
       Message: {
         date: string;

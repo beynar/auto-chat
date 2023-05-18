@@ -3,7 +3,13 @@ import { dev } from "$app/environment";
 export const load = async ({ platform }) => {
   if (dev || !platform?.env?.DB) {
     return {
-      messages: []
+      messages: [
+        {
+          date: "2021-05-01",
+          content: "Hello World",
+          role: "Emotion"
+        }
+      ]
     };
   } else {
     const getMessageSql = /*SQL */ `
@@ -11,7 +17,7 @@ export const load = async ({ platform }) => {
         `;
     const { results, meta, error } = await platform?.env.DB.prepare(getMessageSql).all<App.Types["Message"]>();
     return {
-      messages: results,
+      messages: results as App.Types["Message"][],
       meta,
       error
     };
