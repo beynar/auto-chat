@@ -29,6 +29,7 @@ export async function POST({ platform, request }) {
 
       return json({ messages: results, error });
     } catch (error) {
+      console.log({ error });
       return json({
         error,
         content,
