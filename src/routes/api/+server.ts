@@ -19,14 +19,23 @@ export async function GET({ platform }) {
 export async function POST({ platform, request }) {
   const { content, role, date } = await request.json();
   if (platform?.env?.DB) {
-    const insertMessageSql = /*SQL */ `
+    try {
+      const insertMessageSql = /*SQL */ `
         INSERT INTO messages (content, role, date) VALUES (?, ?, ?)
         `;
-    const { results, error } = await platform?.env.DB.prepare(insertMessageSql)
-      .bind(content, role, date)
-      .all<App.Types["Message"]>();
+      const { results, error } = await platform?.env.DB.prepare(insertMessageSql)
+        .bind(content, role, date)
+        .all<App.Types["Message"]>();
 
-    return json({ messages: results, error });
+      return json({ messages: results, error });
+    } catch (error) {
+      return json({
+        error,
+        content,
+        role,
+        date
+      });
+    }
   } else {
     return json({
       messages: [],
