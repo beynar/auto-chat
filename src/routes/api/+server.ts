@@ -5,9 +5,9 @@ export async function GET({ platform }) {
     const getMessageSql = /*SQL */ `
         SELECT * FROM messages
         `;
-    const { results, error } = await platform?.env.DB.exec<App.Types["Message"]>(getMessageSql);
+    const dbResult = await platform?.env.DB.prepare(getMessageSql).all<App.Types["Message"]>();
 
-    return json({ messages: results, error });
+    return json(dbResult);
   } else {
     return json({
       messages: [],
