@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { invalidateAll } from "$app/navigation";
   import Pencil from "../Icons/Pencil.svelte";
   import Trash from "../Icons/Trash.svelte";
   import Input from "./Input.svelte";
@@ -6,6 +7,19 @@
   $: ({ content, date, role } = message);
   let editedCont;
   let editionMode = false;
+
+  const deleteMessage = async () => {
+    const res = await fetch("https://auto-chat.pages.dev/api", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        date
+      })
+    });
+    await invalidateAll();
+  };
 </script>
 
 <div
@@ -24,12 +38,7 @@
     >
       <Pencil class="w-4" />
     </button>
-    <button
-      class="p-1 border border-slate-300 rounded"
-      on:click={() => {
-        editionMode = !editionMode;
-      }}
-    >
+    <button class="p-1 border border-slate-300 rounded" on:click={deleteMessage}>
       <Trash class="w-4" />
     </button>
   </div>
