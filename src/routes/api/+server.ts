@@ -44,16 +44,26 @@ export async function POST({ platform, request }) {
     });
   }
 }
+export async function PATCH({ platform, request }) {
+  const { content, role, date } = await request.json();
+  if (platform?.env?.DB) {
+    const updateMessageSql = /*SQL */ `
+                UPDATE messages SET content = ?, role = ?, date = ? WHERE date = ?
+                `;
+    const query = platform?.env.DB.prepare(updateMessageSql);
+    query.bind(content, role, date, date);
+    const { results, error } = await query.all<App.Types["Message"]>();
+    return json({ messages: results, error });
+  }
+}
 
 export async function DELETE({ platform, request }) {
-  const { id } = await request.json();
+  const { date } = await request.json();
   if (platform?.env?.DB) {
     const deleteMessageSql = /*SQL */ `
-            DELETE FROM messages WHERE id = $1
-            `;
-    const query = platform?.env.DB.prepare(deleteMessageSql);
-    query.bind(id);
-    const { results, error } = await query.all<App.Types["Message"]>();
+                DELETE FROM messages WHERE date = ?
+                `;
+    const { results, error } = await platform?.env.DB.prepare(deleteMessageSql).bind(date).all<App.Types["Message"]>();
     return json({ messages: results, error });
   }
 }
