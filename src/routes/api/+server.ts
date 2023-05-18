@@ -17,15 +17,21 @@ export async function GET({ platform }) {
 }
 
 export async function POST({ platform, request }) {
-  const { content, role } = await request.json();
+  const { content, role, date } = await request.json();
   if (platform?.env?.DB) {
     const insertMessageSql = /*SQL */ `
-        INSERT INTO messages (content, role) VALUES ($1, $2)
+        INSERT INTO messages (content, role, date) VALUES (?, ?, ?)
         `;
-    const query = platform?.env.DB.prepare(insertMessageSql);
-    query.bind(content, role);
-    const { results, error } = await query.all<App.Types["Message"]>();
+    const { results, error } = await platform?.env.DB.prepare(insertMessageSql)
+      .bind(content, role, date)
+      .all<App.Types["Message"]>();
+
     return json({ messages: results, error });
+  } else {
+    return json({
+      messages: [],
+      error: "No DB"
+    });
   }
 }
 
