@@ -1,23 +1,21 @@
 <script lang="ts">
   import { invalidateAll } from "$app/navigation";
   export let role: "Emotion" | "Raison" | null = null;
+  export let message: App.Types["Message"] | undefined = undefined;
   let content: string = "";
   const saveMessage = async () => {
-    const message = {
-      role,
-      content,
-      date: new Date().toISOString()
-    };
     const res = await fetch("https://auto-chat.pages.dev/api", {
-      method: "POST",
+      method: message ? "PATCH" : "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify(message)
+      body: JSON.stringify({
+        role,
+        date: new Date().toISOString(),
+        ...(message || {}),
+        content
+      })
     });
-    console.log(await res.json());
-    const messages = await fetch("/api").then((res) => res.json());
-    console.log({ messages });
     await invalidateAll();
   };
 </script>

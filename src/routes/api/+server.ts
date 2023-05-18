@@ -50,9 +50,10 @@ export async function PATCH({ platform, request }) {
     const updateMessageSql = /*SQL */ `
                 UPDATE messages SET content = ?, role = ?, date = ? WHERE date = ?
                 `;
-    const query = platform?.env.DB.prepare(updateMessageSql);
-    query.bind(content, role, date, date);
-    const { results, error } = await query.all<App.Types["Message"]>();
+    const { results, error } = await platform?.env.DB.prepare(updateMessageSql)
+      .bind(content, role, date, date)
+      .all<App.Types["Message"]>();
+
     return json({ messages: results, error });
   }
 }
