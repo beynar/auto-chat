@@ -5,9 +5,16 @@ declare global {
     // interface Error {}
     // interface Locals {}
     // interface PageData {}
+    interface Types {
+      Message: {
+        date: string;
+        content: string;
+        role: "Emotion" | "Raison";
+      };
+    }
     interface Platform {
       env?: {
-        EVENTS: import("@cloudflare/workers-types").D1Database;
+        DB: import("@cloudflare/workers-types").D1Database;
       };
     }
   }
