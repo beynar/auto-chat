@@ -44,7 +44,13 @@
   </div>
   <div class="card-body">
     {#if editionMode}
-      <Input {role} {message} />
+      <Input
+        on:sent={() => {
+          editionMode = !editionMode;
+        }}
+        {role}
+        {message}
+      />
     {:else}
       {content}
     {/if}

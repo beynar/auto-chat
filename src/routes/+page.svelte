@@ -10,13 +10,12 @@
   }
 </script>
 
-<div class="flex">
-  <div class="flex-1 bg-secondary bg-opacity-20">
+<div class="grid w-full grid-cols-2">
+  <div class=" bg-secondary bg-opacity-20">
     <Feed messages={data.messages} />
     <Input role="Emotion" />
   </div>
-  <div class="divider m-0 divider-horizontal w-1" />
-  <div class="flex-1 bg-primary bg-opacity-20">
+  <div class=" bg-primary bg-opacity-20">
     <Feed messages={data.messages} />
     <Input role="Raison" />
   </div>
